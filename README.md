@@ -1,73 +1,89 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Sycamore API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A [NestJS](https://nestjs.com/) API with PostgreSQL and Sequelize. Includes wallet transfer (idempotent) and interest accrual.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Prerequisites
 
-## Description
+- **Node.js** (v18 or v20 recommended)
+- **Yarn**
+- **PostgreSQL** (running locally or reachable via `DATABASE_URL`)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Setup
 
-## Installation
+### 1. Install dependencies
 
 ```bash
-$ yarn install
+yarn install
 ```
 
-## Running the app
+### 2. Environment variables
+
+Copy the example env file and set your values:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+cp .env.example .env
 ```
 
-## Test
+Edit `.env`. Required:
+
+| Variable       | Description                          | Example                                      |
+|----------------|--------------------------------------|----------------------------------------------|
+| `DATABASE_URL` | PostgreSQL connection string         | `postgresql://postgres:postgres@localhost:5432/postgres` |
+| `PORT`         | Server port (optional, default 3000)  | `3000`                                       |
+| `NODE_ENV`     | Environment (optional)                | `development`                                |
+
+Optional:
+
+| Variable    | Description              | Example  |
+|-------------|--------------------------|----------|
+| `DB_USE_SSL`  | Use SSL for DB connection | `false` |
+| `DB_LOGGING`  | Log Sequelize queries    | `false` |
+
+The app will not start if `DATABASE_URL` is missing or invalid.
+
+### 3. Database migrations
+
+Create tables (wallets, transaction_logs, interest_accruals):
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+yarn db:migrate
 ```
 
-## Support
+To roll back the last migration:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+yarn db:migrate:undo
+```
 
-## Stay in touch
+### 4. Run the application
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+# development (watch mode)
+yarn start:dev
+
+# production
+yarn build
+yarn start:prod
+```
+
+The API is available at `http://localhost:3000` with global prefix `/api` and default version `v1` (e.g. `http://localhost:3000/api/v1/...`).
+
+## Scripts
+
+| Command            | Description                |
+|--------------------|----------------------------|
+| `yarn start`       | Start once                 |
+| `yarn start:dev`   | Start in watch mode        |
+| `yarn start:prod`  | Run production build      |
+| `yarn build`       | Build for production       |
+| `yarn test`        | Run unit tests             |
+| `yarn test:cov`    | Run tests with coverage    |
+| `yarn test:e2e`    | Run e2e tests              |
+| `yarn db:migrate`  | Run Sequelize migrations   |
+| `yarn db:migrate:undo` | Undo last migration   |
+| `yarn db:seed`     | Run seeders                |
+| `yarn lint`        | Lint and fix               |
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+UNLICENSED (private).
