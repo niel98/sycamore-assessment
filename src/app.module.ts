@@ -5,7 +5,8 @@ import configuration from './config/configuration';
 import { validate } from './config/env.validation';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './lib/common/database';
-import { TransactionModule } from './transaction/transaction.module';
+import { TransactionModule } from './modules/transaction/transaction.module';
+import { InterestModule } from './modules/interest/interest.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TransactionModule } from './transaction/transaction.module';
     }),
     DatabaseModule,
     TransactionModule,
+    InterestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

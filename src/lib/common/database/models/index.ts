@@ -1,12 +1,15 @@
 import { Sequelize } from 'sequelize';
 import { initWalletModel } from './wallet.model';
 import { initTransactionLogModel } from './transaction-log.model';
+import { initInterestAccrualModel } from './interest-accrual.model';
 import { Wallet } from './wallet.model';
 import { TransactionLog } from './transaction-log.model';
+import { InterestAccrual } from './interest-accrual.model';
 
 export function initModels(sequelize: Sequelize) {
   initWalletModel(sequelize);
   initTransactionLogModel(sequelize);
+  initInterestAccrualModel(sequelize);
 
   TransactionLog.belongsTo(Wallet, {
     as: 'fromWallet',
@@ -19,7 +22,10 @@ export function initModels(sequelize: Sequelize) {
   Wallet.hasMany(TransactionLog, { foreignKey: 'fromWalletId' });
   Wallet.hasMany(TransactionLog, { foreignKey: 'toWalletId' });
 
-  return { Wallet, TransactionLog };
+  InterestAccrual.belongsTo(Wallet, { foreignKey: 'walletId' });
+  Wallet.hasMany(InterestAccrual, { foreignKey: 'walletId' });
+
+  return { Wallet, TransactionLog, InterestAccrual };
 }
 
 export { Wallet } from './wallet.model';
@@ -28,3 +34,4 @@ export {
   TRANSACTION_LOG_STATE,
   type TransactionLogState,
 } from './transaction-log.model';
+export { InterestAccrual } from './interest-accrual.model';

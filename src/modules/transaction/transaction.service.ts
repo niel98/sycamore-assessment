@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { Sequelize } from 'sequelize';
 import { Inject } from '@nestjs/common';
-import { SEQUELIZE } from '../lib/common/database';
+import { SEQUELIZE } from '../../lib/common/database';
 import {
   Wallet,
   TransactionLog,
   TRANSACTION_LOG_STATE,
   type TransactionLogState,
-} from '../lib/common/database';
+} from '../../lib/common/database';
 import {
   IBadRequestException,
   INotFoundException,
-} from '../lib/utils/exceptions/exception';
+} from '../../lib/utils/exceptions/exception';
 
 export interface TransferResult {
   id: number;
